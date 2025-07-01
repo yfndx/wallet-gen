@@ -15,7 +15,7 @@ echo "  - Never share your mnemonic phrase"
 echo "  - Don't store wallet files on cloud services"
 echo "  - Use on a secure, offline computer for production wallets"
 echo ""
-read -p "Press Enter to continue..."
+read -p "Press Enter to continue..." < /dev/tty
 echo ""
 echo "=== octra wallet generator installer ==="
 echo ""
