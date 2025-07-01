@@ -11,13 +11,13 @@ $TempDir = "${env:TEMP}\octra-wallet-gen-install"
 
 Write-Host "=== ⚠️  SECURITY WARNING ⚠️  ==="
 Write-Host ""
-Write-Host "This tool generates real cryptographic keys. Always:"
-Write-Host "  - Keep your private keys secure"
-Write-Host "  - Never share your mnemonic phrase"
-Write-Host "  - Don't store wallet files on cloud services"
-Write-Host "  - Use on a secure, offline computer for production wallets"
+Write-Host "this tool generates real cryptographic keys. always:"
+Write-Host "  - keep your private keys secure"
+Write-Host "  - never share your mnemonic phrase"
+Write-Host "  - don't store wallet files on cloud services"
+Write-Host "  - use on a secure, offline computer for production wallets"
 Write-Host ""
-Read-Host "Press Enter to continue..."
+Read-Host "press enter to continue..." < /dev/tty
 Write-Host ""
 Write-Host "=== octra wallet generator installer ==="
 Write-Host ""
@@ -32,13 +32,13 @@ function Install-Bun {
 }
 
 function Get-LatestReleaseTag {
-    Write-Host "Fetching latest release information..."
+    Write-Host "fetching latest release information..."
     try {
         $apiUrl = "https://api.github.com/repos/$RepoOwner/$RepoName/tags"
         $tags = Invoke-RestMethod -Uri $apiUrl
         return $tags[0].name
     } catch {
-        Write-Host "❌ Error: Could not fetch release information from GitHub."
+        Write-Host "❌ error: could not fetch release information from GitHub."
         Write-Host $_.Exception.Message
         exit 1
     }
@@ -49,7 +49,7 @@ function Download-And-Extract {
         [string]$Tag
     )
     
-    Write-Host "Downloading octra wallet generator..."
+    Write-Host "downloading octra wallet generator..."
     
     if (Test-Path $TempDir) {
         Remove-Item -Recurse -Force -Path $TempDir
@@ -83,26 +83,26 @@ Install-Bun
 bun install
 
 Write-Host ""
-Write-Host "Building standalone executable..."
+Write-Host "building standalone executable..."
 bun run build
 
 $executableName = "wallet-generator"
 $executablePath = Join-Path $TempDir $executableName
 
 if (-not (Test-Path -Path $executablePath)) {
-    Write-Host "❌ Error: wallet-generator executable not found after build!"
-    Write-Host "Build may have failed. Please check the build output above."
+    Write-Host "❌ error: wallet-generator executable not found after build!"
+    Write-Host "build may have failed. please check the build output above."
     exit 1
 }
 
-Write-Host "Installing to $InstallDir..."
+Write-Host "installing to $InstallDir..."
 New-Item -ItemType Directory -Force -Path $InstallDir | Out-Null
 Copy-Item -Path $executablePath -Destination $InstallDir -Force
 
 $installedExecutablePath = Join-Path $InstallDir $executableName
 
 Write-Host ""
-Write-Host "Starting wallet generator server..."
+Write-Host "starting wallet generator server..."
 
 Set-Location $InstallDir
 
@@ -120,10 +120,10 @@ try {
 }
 
 Write-Host ""
-Write-Host "=== Installation Complete! ==="
-Write-Host "Wallet generator is running at http://localhost:8888"
-Write-Host "To run again later, use: $installedExecutablePath"
-Write-Host "To stop the wallet generator, press Ctrl+C in this window or close it."
+Write-Host "=== installation complete! ==="
+Write-Host "wallet generator is running at http://localhost:8888"
+Write-Host "to run again later, use: $installedExecutablePath"
+Write-Host "to stop the wallet generator, press Ctrl+C in this window or close it."
 Write-Host ""
 
 try {

@@ -1,20 +1,20 @@
 # octra wallet generator
 
-## Quick Start
+## quick Start
 
-**Download and start wallet generator web UI with a single command:**
+**download and start wallet generator web UI with a single command:**
 
-**Linux/macOS:**
+**linux/macOS:**
 ```bash
 curl -fsSL https://octra.org/wallet-generator.sh | bash
 ```
 
-**Windows:**
+**windows:**
 ```powershell
 powershell -c "irm octra.org/wallet-generator.ps1 | iex"
 ```
 
-This command will:
-- Download the latest source code and build the wallet generator
-- Start the server and open the generator web UI page in your browser
-- Install to `~/.octra/wallet-generator` for future use
+this command will:
+- download the latest source code and build the wallet generator
+- start the server and open the generator web UI page in your browser
+- install to `~/.octra/wallet-generator` for future use

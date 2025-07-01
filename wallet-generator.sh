@@ -9,13 +9,13 @@ TEMP_DIR="/tmp/octra-wallet-gen-install"
 
 echo "=== ⚠️  SECURITY WARNING ⚠️  ==="
 echo ""
-echo "This tool generates real cryptographic keys. Always:"
-echo "  - Keep your private keys secure"
-echo "  - Never share your mnemonic phrase"
-echo "  - Don't store wallet files on cloud services"
-echo "  - Use on a secure, offline computer for production wallets"
+echo "this tool generates real cryptographic keys. always:"
+echo "  - keep your private keys secure"
+echo "  - never share your mnemonic phrase"
+echo "  - don't store wallet files on cloud services"
+echo "  - use on a secure, offline computer for production wallets"
 echo ""
-read -p "Press Enter to continue..." < /dev/tty
+read -p "press enter to continue..." < /dev/tty
 echo ""
 echo "=== octra wallet generator installer ==="
 echo ""
@@ -37,24 +37,23 @@ get_latest_release() {
 
 download_and_extract() {
     local tag=$1
-    echo "Downloading octra wallet generator..."
+    echo "downloading octra wallet generator..."
     
     rm -rf "$TEMP_DIR"
     mkdir -p "$TEMP_DIR"
     
     local tarball_url="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/tarball/refs/tags/${tag}"
-    echo "Downloading from $tarball_url"
     curl -L -o "$TEMP_DIR/release.tar.gz" "$tarball_url"
 
     cd "$TEMP_DIR"
     tar -xzf release.tar.gz --strip-components=1
 }
 
-echo "Fetching latest release information..."
+echo "fetching latest release information..."
 LATEST_TAG=$(get_latest_release)
 if [ -z "$LATEST_TAG" ]; then
-    echo "❌ Error: Could not fetch latest release information."
-    echo "Please check your internet connection and try again."
+    echo "❌ error: could not fetch latest release information."
+    echo "please check your internet connection and try again."
     exit 1
 fi
 
@@ -67,29 +66,29 @@ install_bun
 bun install
 
 echo ""
-echo "Building standalone executable..."
+echo "building standalone executable..."
 bun run build
 
 if [ ! -f "./wallet-generator" ]; then
-    echo "❌ Error: wallet-generator executable not found!"
-    echo "Build may have failed. Please check the build output above."
+    echo "❌ error: wallet-generator executable not found!"
+    echo "build may have failed. please check the build output above."
     exit 1
 fi
 
-echo "Installing to $INSTALL_DIR..."
+echo "installing to $INSTALL_DIR..."
 mkdir -p "$INSTALL_DIR"
 cp ./wallet-generator "$INSTALL_DIR/"
 
 echo ""
-echo "Starting wallet generator server..."
+echo "starting wallet generator server..."
 
 cd "$INSTALL_DIR"
 
 rm -rf "$TEMP_DIR"
 
 if lsof -i :8888 >/dev/null 2>&1; then
-    echo "❌ Error: Port 8888 is already in use!"
-    echo "Please stop any existing service using port 8888."
+    echo "❌ error: port 8888 is already in use!"
+    echo "please stop any existing service using port 8888."
     exit 1
 fi
 
@@ -105,10 +104,10 @@ if [ -n "$BROWSER_CMD" ]; then
 fi
 
 echo ""
-echo "=== Installation Complete! ==="
-echo "Wallet generator is running at http://localhost:8888"
-echo "To run again later, use: $INSTALL_DIR/wallet-generator"
-echo "To stop the wallet generator, press Ctrl+C"
+echo "=== installation complete! ==="
+echo "wallet generator is running at http://localhost:8888"
+echo "to run again later, use: $INSTALL_DIR/wallet-generator"
+echo "to stop the wallet generator, press Ctrl+C"
 echo ""
 
 wait $WALLET_PID
