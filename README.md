@@ -1,38 +1,20 @@
-# Octra Wallet Generator
-
-A secure wallet generator for Octra blockchain.
+# octra wallet generator
 
 ## Quick Start
 
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/octra-labs/wallet-gen.git
-   cd wallet-gen
-   ```
+**Download and start wallet generator web UI with a single command:**
 
-2. **Run the wallet generator webserver:**
-   
-   **Linux/macOS:**
-   ```bash
-   chmod +x ./start.sh
-   ./start.sh
-   ```
-   
-   **Windows:**
-   ```bash
-   start.bat
-   ```
+**Linux/macOS:**
+```bash
+curl -fsSL https://octra.org/wallet-generator.sh | bash
+```
 
-3. **Open your browser:**
-   Navigate to `http://localhost:8888`
+**Windows:**
+```powershell
+powershell -c "irm octra.org/wallet-generator.ps1 | iex"
+```
 
-### Generating Wallets
-
-1. **Generate a wallet:**
-   Click "GENERATE NEW WALLET" and watch the real-time progress
-
-2. **Wallet features:**
-   - View mnemonic phrase, private/public keys, and address
-   - Test signature functionality
-   - Derive addresses for different network types
-   - Auto-save wallet file to disk
+This command will:
+- Download the latest source code and build the wallet generator
+- Start the server and open the generator web UI page in your browser
+- Install to `~/.octra/wallet-generator` for future use

@@ -5,31 +5,25 @@ import { fileURLToPath } from "url";
 import nacl from "tweetnacl";
 import bip39 from "bip39";
 
-import indexHtml from "./index.html" with { type: "text" };
-import logoSvg from "./assets/logo.svg" with { type: "text" };
-import foundersGroteskFontPath from "./assets/founders-grotesk-bold.woff2" with { type: "file" };
-import nationalFontPath from "./assets/national-regular.woff2" with { type: "file" };
+import indexHtml from "./static/index.html" with { type: "text" };
+import logoSvg from "./static/logo.svg" with { type: "text" };
+import foundersGroteskFontPath from "./static/founders-grotesk-bold.woff2" with { type: "file" };
+import nationalFontPath from "./static/national-regular.woff2" with { type: "file" };
 
-// ESM equivalent of __dirname
 const __filename: string = fileURLToPath(import.meta.url);
 const __dirname: string = path.dirname(__filename);
 
-// Embed static assets for executable builds
 let foundersGroteskFont: ArrayBuffer;
 let nationalFont: ArrayBuffer;
 
-// Load assets asynchronously
 async function loadAssets() {
   try {
     foundersGroteskFont = await Bun.file(foundersGroteskFontPath).arrayBuffer();
     nationalFont = await Bun.file(nationalFontPath).arrayBuffer();
   } catch (error) {
-    console.warn("Could not load embedded assets:", error.message);
-    // Assets will be served from filesystem instead
   }
 }
 
-// Type definitions
 interface MasterKey {
   masterPrivateKey: Buffer;
   masterChainCode: Buffer;
@@ -99,7 +93,7 @@ function base64Encode(buffer: Buffer | Uint8Array): string {
   return Buffer.from(buffer).toString("base64");
 }
 
-// Base58 encoding for Octra addresses
+// Base58 encoding for octra addresses
 function base58Encode(buffer: Buffer): string {
   if (buffer.length === 0) return "";
 
@@ -272,7 +266,7 @@ function deriveForNetwork(
   };
 }
 
-// Create Octra address
+// Create octra address
 function createOctraAddress(publicKey: Buffer): string {
   const hash: Buffer = crypto.createHash("sha256").update(publicKey).digest();
   const base58Hash: string = base58Encode(hash);
@@ -392,7 +386,7 @@ async function handleGenerateWallet(): Promise<Response> {
         controller.enqueue(
           encoder.encode(
             `data: ${JSON.stringify({
-              status: "Generating Octra address...",
+              status: "Generating octra address...",
             })}\n\n`
           )
         );
@@ -513,7 +507,7 @@ async function handleSaveWallet(request: Request): Promise<Response> {
       -8
     )}_${timestamp}.txt`;
 
-    const content: string = `OCTRA WALLET
+    const content: string = `octra wallet
 ${"=".repeat(50)}
 
 SECURITY WARNING: KEEP THIS FILE SECURE AND NEVER SHARE YOUR PRIVATE KEY
@@ -611,7 +605,7 @@ function serveEmbeddedAsset(pathname: string): Response | null {
       }
       break;
 
-    case '/assets/logo.svg':
+    case '/static/logo.svg':
       if (logoSvg) {
         return new Response(logoSvg, {
           headers: { 'Content-Type': 'image/svg+xml' }
@@ -619,7 +613,7 @@ function serveEmbeddedAsset(pathname: string): Response | null {
       }
       break;
 
-    case '/assets/founders-grotesk-bold.woff2':
+    case '/static/founders-grotesk-bold.woff2':
       if (foundersGroteskFont) {
         return new Response(foundersGroteskFont, {
           headers: {
@@ -630,7 +624,7 @@ function serveEmbeddedAsset(pathname: string): Response | null {
       }
       break;
 
-    case '/assets/national-regular.woff2':
+    case '/static/national-regular.woff2':
       if (nationalFont) {
         return new Response(nationalFont, {
           headers: {
@@ -660,10 +654,8 @@ async function serveStaticFile(filePath: string): Promise<Response> {
   }
 }
 
-// Load embedded assets
 await loadAssets();
 
-// Start server
 const PORT: number = 8888;
 
 const server = Bun.serve({
@@ -676,7 +668,6 @@ const server = Bun.serve({
       method: request.method,
     };
 
-    // Handle GET requests for static assets (embedded or file system)
     if (method === "GET") {
       // Try to serve embedded asset first
       const embeddedAsset = serveEmbeddedAsset(pathname);
@@ -686,16 +677,15 @@ const server = Bun.serve({
 
       // Fallback to file system for development mode
       if (pathname === "/" || pathname === "/index.html") {
-        return serveStaticFile(path.join(__dirname, "index.html"));
+        return serveStaticFile(path.join(__dirname, "static/index.html"));
       }
 
-      if (pathname.startsWith("/assets/")) {
+      if (pathname.startsWith("/static/")) {
         const assetPath = path.join(__dirname, pathname);
         return serveStaticFile(assetPath);
       }
     }
 
-    // Handle API routes
     if (method === "POST" && pathname === "/generate") {
       return handleGenerateWallet();
     }
@@ -708,9 +698,9 @@ const server = Bun.serve({
       return handleDeriveWallet(request);
     }
 
-    // 404 for all other routes
     return new Response("Not Found", { status: 404 });
   },
 });
 
-console.log("OCTRA Wallet Generator Web Server");
+console.log("octra wallet generator server");
+console.log(`The server is running at: http://localhost:${PORT}`);

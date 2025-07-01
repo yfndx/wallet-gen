@@ -60,7 +60,7 @@ jobs:
           Remove-Item -Recurse -Force C:\temp-bun-cache-init
 
       - name: Build executable
-        run: bun build --compile --target=${{ matrix.bun-target }}-baseline --outfile=wallet-generator${{ matrix.executable-ext }} ./wallet_generator.ts
+        run: bun build --compile --target=${{ matrix.bun-target }}-baseline --outfile=wallet-generator${{ matrix.executable-ext }} ./src/server.ts
 
       - name: Test executable (Linux/macOS)
         if: runner.os != 'Windows'
