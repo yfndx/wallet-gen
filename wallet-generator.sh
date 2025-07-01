@@ -29,7 +29,6 @@ install_bun() {
 }
 
 get_latest_release() {
-    echo "Fetching latest release information..."
     curl -s "https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/tags" | \
     grep '"name":' | \
     head -1 | \
@@ -44,12 +43,14 @@ download_and_extract() {
     mkdir -p "$TEMP_DIR"
     
     local tarball_url="https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/tarball/refs/tags/${tag}"
+    echo "Downloading from $tarball_url"
     curl -L -o "$TEMP_DIR/release.tar.gz" "$tarball_url"
 
     cd "$TEMP_DIR"
     tar -xzf release.tar.gz --strip-components=1
 }
 
+echo "Fetching latest release information..."
 LATEST_TAG=$(get_latest_release)
 if [ -z "$LATEST_TAG" ]; then
     echo "❌ Error: Could not fetch latest release information."
