@@ -6,6 +6,7 @@ REPO_OWNER="octra-labs"
 REPO_NAME="wallet-gen"
 INSTALL_DIR="$HOME/.octra"
 TEMP_DIR="/tmp/octra-wallet-gen-install"
+BUN_INSTALL_CHECKSUM="144adba33c737330a081689ea5dd54c693c25d2bdb87b1f2d6aaed3c93de737e"
 
 echo "=== ⚠️  SECURITY WARNING ⚠️  ==="
 echo ""
@@ -22,7 +23,14 @@ echo ""
 
 install_bun() {
     if ! command -v bun &> /dev/null; then
-        curl -fsSL https://bun.sh/install | bash
+        curl -fsSL https://bun.sh/install -o /tmp/bun_install.sh
+        if ! echo "$BUN_INSTALL_CHECKSUM  /tmp/bun_install.sh" | shasum -a 256 -c -q; then
+            echo "Failed to install bun! Please install it manually from https://bun.sh"
+            rm -f /tmp/bun_install.sh
+            exit 1
+        fi
+        bash /tmp/bun_install.sh
+        rm -f /tmp/bun_install.sh
         # Set PATH to include Bun's binary directory
         export PATH="$HOME/.bun/bin:$PATH"
     fi
