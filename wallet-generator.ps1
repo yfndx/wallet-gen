@@ -8,7 +8,6 @@ $RepoOwner = "octra-labs"
 $RepoName = "wallet-gen"
 $InstallDir = "${Home}\.octra"
 $TempDir = "${env:TEMP}\octra-wallet-gen-install"
-$BunInstallChecksum = "73207f5bab5c4721a3955842867175808b8b09fe9e53aae071ea57a23f5ac61c"
 
 Write-Host "=== ⚠️  SECURITY WARNING ⚠️  ==="
 Write-Host ""
@@ -25,21 +24,9 @@ Write-Host ""
 
 function Install-Bun {
     if (-not (Get-Command bun -ErrorAction SilentlyContinue)) {
-        $tempScriptPath = Join-Path $env:TEMP "bun-install.ps1"
-        try {
-            Invoke-WebRequest -Uri 'https://bun.sh/install.ps1' -OutFile $tempScriptPath -UseBasicParsing
-            
-            if ((Get-FileHash -Path $tempScriptPath).Hash.ToLower() -ne $BunInstallChecksum) {
-                Write-Host "Failed to install bun! Please install it manually from https://bun.sh"
-                Remove-Item -Path $tempScriptPath -Force
-                exit 1
-            }
-            
-            & $tempScriptPath
-            $env:PATH = "${Home}\.bun\bin;$($env:PATH)"
-        } finally {
-            Remove-Item -Path $tempScriptPath -Force
-        }
+        & "$TempDir\scripts\install_bun.ps1"
+        # Set PATH to include Bun's binary directory
+        $env:PATH = "${Home}\.bun\bin;$($env:PATH)"
     }
 }
 
