@@ -60,7 +60,7 @@ jobs:
           Remove-Item -Recurse -Force C:\temp-bun-cache-init
 
       - name: Build executable
-        run: bun build --compile --target=${{ matrix.bun-target }}-baseline --outfile=wallet-generator${{ matrix.executable-ext }} ./wallet_generator.ts
+        run: bun build --compile --target=${{ matrix.bun-target }}-baseline --outfile=wallet-generator${{ matrix.executable-ext }} ./src/server.ts
 
       - name: Test executable (Linux/macOS)
         if: runner.os != 'Windows'
@@ -84,7 +84,7 @@ jobs:
           fi
           
           # Test embedded assets
-          if curl -f http://localhost:8888/assets/logo.svg > /dev/null 2>&1; then
+          if curl -f http://localhost:8888/static/logo.svg > /dev/null 2>&1; then
             echo "✓ Embedded assets are working"
           else
             echo "✗ Embedded assets failed"
@@ -123,7 +123,7 @@ jobs:
           
           # Test embedded assets
           try {
-            $response = Invoke-WebRequest -Uri "http://localhost:8888/assets/logo.svg" -TimeoutSec 10
+            $response = Invoke-WebRequest -Uri "http://localhost:8888/static/logo.svg" -TimeoutSec 10
             if ($response.StatusCode -eq 200) {
               Write-Host "✓ Embedded assets are working"
             } else {
